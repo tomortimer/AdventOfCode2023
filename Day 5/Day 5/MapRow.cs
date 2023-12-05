@@ -19,11 +19,18 @@ namespace Day_5
             range = rangeInp;
         }
 
-        public bool IsInRange(long input)
+        public bool IsInDomain(long input)
         {
             bool ret = false;
             // range is non inclusive at top end
             if(inputStart <= input && input < (inputStart + range)) { ret= true;}
+            return ret;
+        }
+
+        public bool IsInRange(long input)
+        {
+            bool ret = false;
+            if(outputStart <= input && input < (outputStart + range)) { ret = true; }
             return ret;
         }
 
@@ -32,6 +39,13 @@ namespace Day_5
             long ret = -1;
             long difference = input - inputStart;
             return outputStart + difference;
+        }
+
+        //added for part 2
+        public long ReverseTransform(long input)
+        {
+            long inversed = input - outputStart + inputStart;
+            return inversed;
         }
     }
 }

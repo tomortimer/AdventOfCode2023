@@ -27,9 +27,19 @@ namespace Day_5
             long ret = -1;
             for(int i = 0; i < rows.Count; i++)
             {
-                if (rows[i].IsInRange(input)) { ret = rows[i].Transform(input); i = rows.Count(); }
+                if (rows[i].IsInDomain(input)) { ret = rows[i].Transform(input); i = rows.Count(); }
             }
             if(ret == -1) { ret = input; }
+            return ret;
+        }
+
+        public long ReverseTransform(long input)
+        {
+            long ret = input;
+            for (int i = 0;i < rows.Count(); i++)
+            {
+                if (rows[i].IsInRange(input)) { ret = rows[i].ReverseTransform(input); i = rows.Count(); }
+            }
             return ret;
         }
     }

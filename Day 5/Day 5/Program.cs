@@ -10,14 +10,11 @@ namespace Day_5
         {
             StreamReader reader = new StreamReader("input.txt");
             List<string> seedsInp = new List<string>(reader.ReadLine().Substring(7).Split(' '));
-            List<long> seeds = new List<long>();
+            // first long is start, second is range
+            List<Tuple<long, long>> seedPairs = new List<Tuple<long, long>>();
             for(int i = 0; i < seedsInp.Count(); i+=2) 
             {
-                int seedRange = Convert.ToInt32(seedsInp[i + 1]);
-                for(int j = 0; j < seedRange; j++)
-                {
-                    seeds.Add(Convert.ToInt64(seedsInp[i]) + j);
-                } 
+                seedPairs.Add(new Tuple<long, long>(Convert.ToInt64(seedsInp[i]), Convert.ToInt64(seedsInp[i + 1])));
             }
 
             //now read in first table seeds to soil map
@@ -94,8 +91,8 @@ namespace Day_5
             reader.Close();
 
             //now transform all seeds
-            long lowest = -1;
-            for(int x = 0; x < seeds.Count(); x++) 
+
+            /*for(int x = 0; x < seeds.Count(); x++) 
             {
                 seeds[x] = SeedsToSoil.Transform(seeds[x]);
                 seeds[x] = SoilToFert.Transform(seeds[x]);
@@ -106,8 +103,32 @@ namespace Day_5
                 seeds[x] = HumidToLoc.Transform(seeds[x]);
                 if (seeds[x] < lowest || lowest == -1) { lowest = seeds[x]; }
                 Console.WriteLine(seeds[x]);
+            }*/
+            bool found = false;
+            
+            long originalLowest = -1;
+            while (!found)
+            {
+                originalLowest++;
+                long num = originalLowest;
+                num = HumidToLoc.ReverseTransform(num);
+                num = TempToHumid.ReverseTransform(num);
+                num = LightToTemp.ReverseTransform(num);
+                num = WaterToLight.ReverseTransform(num);
+                num = FertToWater.ReverseTransform(num);
+                num = SoilToFert.ReverseTransform(num);
+                num = SeedsToSoil.ReverseTransform(num);
+
+                for(int x = 0; x < seedPairs.Count(); x++)
+                {
+                    if (seedPairs[x].Item1 <= num && num < (seedPairs[x].Item1 + seedPairs[x].Item2)) 
+                    { 
+                        found = true; 
+                        x = seedPairs.Count(); 
+                    }
+                }
             }
-            Console.WriteLine("Lowest: " + lowest);
+            Console.WriteLine("Lowest: " + originalLowest);
         }
     }
 }

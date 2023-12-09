@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Xml.Linq;
 
 namespace MorteTools
 {
-    public class List<T>
+    public class List<T> : IEnumerable<T>
     {
         //head node poiting to nothing by default
         private ListNode<T> head = null;
@@ -190,7 +188,7 @@ namespace MorteTools
             for (int x = 0; x < Count(); x++)
             {
                 tmpstr = tmpstr + Convert.ToString(RetrieveAt(x, head));
-                if(!(x == Count() - 1)) { tmpstr += ","; }
+                if (!(x == Count() - 1)) { tmpstr += ","; }
             }
             return tmpstr;
         }
@@ -249,6 +247,19 @@ namespace MorteTools
                 }
             }
             else { return -1; }
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new Enumerator<T>(this);
+        }
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            // this calls the IEnumerator<Foo> GetEnumerator method
+            // as explicit method implementations aren't used for method resolution in C#
+            // polymorphism (IEnumerator<T> implements IEnumerator)
+            // ensures this is type-safe
+            return GetEnumerator();
         }
     }
 }

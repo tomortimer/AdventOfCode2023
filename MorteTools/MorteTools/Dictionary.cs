@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MorteTools
 {
-    public class Dictionary<K,T>
+    public class Dictionary<K,T> : IEnumerable<KeyValuePair<K, T>>
     {
         List<K> keys;
         List<T> values;
@@ -11,6 +13,25 @@ namespace MorteTools
         {
             keys = new List<K>();
             values = new List<T>();
+        }
+        
+        public IEnumerator<KeyValuePair<K, T>> GetEnumerator()
+        {
+            List<KeyValuePair<K,T>> enumList = new List<KeyValuePair<K,T>>();
+            foreach(K key in keys)
+            {
+                enumList.Add(new KeyValuePair<K, T>(key, this[key]));
+            }
+            return new Enumerator<KeyValuePair<K, T>>(enumList);
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            // this calls the IEnumerator<Foo> GetEnumerator method
+            // as explicit method implementations aren't used for method resolution in C#
+            // polymorphism (IEnumerator<T> implements IEnumerator)
+            // ensures this is type-safe
+            return GetEnumerator();
         }
 
         public T this[K key]

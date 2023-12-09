@@ -236,7 +236,7 @@ namespace MorteTools
                     {
                         return index;
                     }
-                    else { return Find(inp, node.next, index++); }
+                    else { return Find(inp, node.next, index + 1); }
                 }
                 else
                 {

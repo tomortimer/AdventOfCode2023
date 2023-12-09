@@ -19,7 +19,7 @@ namespace Day_9
                     lineNums.Add(int.Parse(arr[i]));
                 }
                 Sequence tmp = new Sequence(lineNums);
-                sum += tmp.Extrapolate();
+                sum += tmp.ExtrapolateBackwards();
             }
             Console.WriteLine(sum);
         }

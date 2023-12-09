@@ -12,13 +12,13 @@ namespace Day_9
             // now calculate differences
             List<int> diffs = new List<int>();
             int zeroCtr = 0;
-            for (int i = 0; i < numbers.Count()-1; i++)
+            for (int i = 0; i < numbers.Count() - 1; i++)
             {
                 int tmp = numbers[i + 1] - numbers[i];
                 diffs.Add(tmp);
-                if(tmp == 0) { zeroCtr++; }
+                if (tmp == 0) { zeroCtr++; }
             }
-            if (!(zeroCtr == diffs.Count())) 
+            if (!(zeroCtr == diffs.Count()))
             {
                 differences = new Sequence(diffs);
             }
@@ -28,11 +28,22 @@ namespace Day_9
         public int Extrapolate()
         {
             int newTerm = 0;
-            if(differences != null)
+            if (differences != null)
             {
-                newTerm = numbers[numbers.Count()-1] + differences.Extrapolate();
+                newTerm = numbers[numbers.Count() - 1] + differences.Extrapolate();
             }
             else { newTerm = numbers[numbers.Count() - 1]; }
+            return newTerm;
+        }
+
+        public int ExtrapolateBackwards()
+        {
+            int newTerm = 0;
+            if (differences != null)
+            {
+                newTerm = numbers[0] - differences.ExtrapolateBackwards();
+            }
+            else { newTerm = numbers[0]; }
             return newTerm;
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Xml.Linq;
 
 namespace MorteTools
 {
@@ -161,6 +162,7 @@ namespace MorteTools
             else { return 0; }
         }
 
+
         //this could also be done with while but seems like clean recursion so I'll leave it in :)
         private int Length(ListNode<T> node)
         {
@@ -187,7 +189,8 @@ namespace MorteTools
             string tmpstr = "";
             for (int x = 0; x < Count(); x++)
             {
-                tmpstr = tmpstr + Convert.ToString(RetrieveAt(x, head)) + ",";
+                tmpstr = tmpstr + Convert.ToString(RetrieveAt(x, head));
+                if(!(x == Count() - 1)) { tmpstr += ","; }
             }
             return tmpstr;
         }
@@ -218,5 +221,34 @@ namespace MorteTools
             }
         }
 
+        public int GetIndex(T inp)
+        {
+            return Find(inp, head, 0);
+        }
+
+        private int Find(T inp, ListNode<T> node, int index)
+        {
+            if (node != null)
+            {
+                if (node.next != null)
+                {
+                    if (node.GetData().Equals(inp))
+                    {
+                        return index;
+                    }
+                    else { return Find(inp, node.next, index++); }
+                }
+                else
+                {
+                    //if we are here, next node is null, therefore recursion unspools
+                    if (node.GetData().Equals(inp))
+                    {
+                        return index;
+                    }
+                    else { return -1; }
+                }
+            }
+            else { return -1; }
+        }
     }
 }

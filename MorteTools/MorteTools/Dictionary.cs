@@ -51,7 +51,14 @@ namespace MorteTools
         {
             T ret = default;
             int ptr = keys.GetIndex(key);
-            ret = values[ptr];
+            if(ptr == -1) { ret = values[ptr]; }
+            return ret;
+        }
+
+        public bool Contains(K key)
+        {
+            bool ret = false;
+            if(keys.Contains(key)) { ret = true; }
             return ret;
         }
 

@@ -51,7 +51,7 @@ namespace MorteTools
         {
             T ret = default;
             int ptr = keys.GetIndex(key);
-            if(ptr == -1) { ret = values[ptr]; }
+            if(ptr != -1) { ret = values[ptr]; }
             return ret;
         }
 

@@ -2,6 +2,7 @@
 using System.Transactions;
 using System.Collections.Generic;
 using MorteTools;
+using System.IO;
 namespace Day_10
 {
     enum Directions
@@ -67,12 +68,33 @@ namespace Day_10
                 distance++;
 
             } while (!current.Equals(endNode));
-            
-            Console.WriteLine(distance/2);
+
+            /*Console.WriteLine(distance/2);
             Console.WriteLine((double)visited.Count / 2f);
             Console.WriteLine("Start: "+startIndex.Item1+","+startIndex.Item2);
             Console.WriteLine("Start Type: " + pipes[startIndex.Item1, startIndex.Item2]);
             Console.WriteLine("End: "+endNode.Item1+","+endNode.Item2);
+
+            
+            StreamWriter writer = new StreamWriter("output.txt");
+            for (int y = 0; y < yBound; y++)
+            {
+                for (int x = 0; x < xBound; x++)
+                {
+                    if (visited.Contains(new Tuple<int, int>(x, y))) { writer.Write(Convert.ToString(lines[y][x])); }
+                    else
+                    {
+                        writer.Write(".");
+                    }
+                }
+                writer.WriteLine();
+            }
+            writer.Close();
+            //this looks super cool just needed an idea of the puzzle*/
+
+            //part two stuff
+            //need to have a left hand and right hand side of path somehow??
+            //selective flooding maybe?
         }
 
         static bool InBounds(Tuple<int,int> pos, int xBound, int yBound)

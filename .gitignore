@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 # AoC inputs (late mb)
 input.txt
+output.txt

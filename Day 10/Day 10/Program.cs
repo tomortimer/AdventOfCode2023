@@ -95,6 +95,8 @@ namespace Day_10
             //part two stuff
             //need to have a left hand and right hand side of path somehow??
             //selective flooding maybe?
+            // ideq: expand grid, like zoom in so each symbol is now 3x3 then flood from a chosen point, should work in theory. as long as chosen point is right. then count the number of flooded blank 3x3s?
+            
         }
 
         static bool InBounds(Tuple<int,int> pos, int xBound, int yBound)

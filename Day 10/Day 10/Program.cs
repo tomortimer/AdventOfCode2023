@@ -3,6 +3,8 @@ using System.Transactions;
 using System.Collections.Generic;
 using MorteTools;
 using System.IO;
+using System.Linq;
+using System.Runtime.ExceptionServices;
 namespace Day_10
 {
     enum Directions
@@ -68,12 +70,13 @@ namespace Day_10
                 distance++;
 
             } while (!current.Equals(endNode));
+            visited.Add(endNode);
 
             /*Console.WriteLine(distance/2);
             Console.WriteLine((double)visited.Count / 2f);
             Console.WriteLine("Start: "+startIndex.Item1+","+startIndex.Item2);
             Console.WriteLine("Start Type: " + pipes[startIndex.Item1, startIndex.Item2]);
-            Console.WriteLine("End: "+endNode.Item1+","+endNode.Item2);*/
+            Console.WriteLine("End: "+endNode.Item1+","+endNode.Item2);
 
 
             StreamWriter writer = new StreamWriter("output.txt");
@@ -99,31 +102,40 @@ namespace Day_10
             //part two stuff
             //need to have a left hand and right hand side of path somehow??
             //selective flooding maybe?
-            // ideq: expand grid, like zoom in so each symbol is now 3x3 then flood from a chosen point, should work in theory. as long as chosen point is right. then count the number of flooded blank 3x3s?
-            lines = fp.GetLinesFromTxt("output.txt");
-            Pipe[,] expandedPipes = new Pipe[lines[0].Length*3, lines.Count() * 3];
-            int yPos = 0; int xPos = 0;
+            //disregard above delusions: Even-Odd Rule (algo)*/
+            lines = fp.GetLinesFromTxt("input2.txt");
+            char[,] chars = new char[lines[0].Length, lines.Count()];
+            int ctr = 0;
             for(int y = 0; y < lines.Count(); y++)
             {
-                for(int x = 0;x < lines[0].Length; x++)
+                for(int x = 0; x < lines[0].Count(); x++)
                 {
-                    expandedPipes[xPos, yPos] = new Pipe('.');
-                    if (lines[y][x] == 'L' || lines[y][x] == '|' || lines[y][x] == 'J') { expandedPipes[xPos + 1, yPos] = new Pipe('|'); }
-                    else { expandedPipes[xPos + 1, yPos] = new Pipe('.'); }
-                    expandedPipes[xPos+2, yPos] = new Pipe('.');
-                    if (lines[y][x] == '-' || lines[y][x] == '7' || lines[y][x] == 'J') { expandedPipes[xPos, yPos+1] = new Pipe('-'); }
-                    else { expandedPipes[xPos, yPos+1] = new Pipe('.'); }
-                    expandedPipes[xPos+1, yPos+1] = new Pipe(lines[y][x]);
-                    if (lines[y][x] == 'F' || lines[y][x] == '-' || lines[y][x] == 'L') { expandedPipes[xPos + 2, yPos+1] = new Pipe('-'); }
-                    else { expandedPipes[xPos + 2, yPos+1] = new Pipe('.'); }
-                    expandedPipes[xPos, yPos + 2] = new Pipe('.');
-                    if (lines[y][x] == '7' || lines[y][x] == '|' || lines[y][x] == 'F') { expandedPipes[xPos + 1, yPos+2] = new Pipe('|'); }
-                    else { expandedPipes[xPos + 1, yPos+2] = new Pipe('.'); }
-                    expandedPipes[xPos + 2, yPos + 2] = new Pipe('.');
-                    xPos += 3;
+                    chars[x, y] = lines[y][x];
+                    if (!visited.Contains(new Tuple<int,int>(x,y)))
+                    {
+                        int loopCtr = 0;
+                        for (int v = x; v < lines[0].Count(); v++)
+                        {
+                            if (visited.Contains(new Tuple<int, int>(v, y)) && lines[y][v] != 'L' && lines[y][v] != 'J' && lines[y][v] != '-')
+                            {
+                                loopCtr++;
+                            }
+                        }
+                        if(loopCtr % 2 != 0) { ctr++; chars[x, y] = 'I'; }
+                    }
                 }
-                yPos += 3;
             }
+            Console.WriteLine("Part 2: " + ctr);
+            StreamWriter writer = new StreamWriter("output.txt");
+            for(int y = 0; y < lines.Count(); y++)
+            {
+                for (int x = 0; x < lines[0].Length; x++) 
+                {
+                    writer.Write(Convert.ToString(chars[x,y]));
+                }
+                writer.WriteLine();
+            }
+            writer.Close();
         }
 
         static bool InBounds(Tuple<int,int> pos, int xBound, int yBound)

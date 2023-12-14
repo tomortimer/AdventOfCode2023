@@ -65,7 +65,8 @@ namespace MorteTools
         public void SetAt(K key, T value)
         {
             int ptr = keys.GetIndex(key);
-            values[ptr] = value;
+            if(ptr != -1) { values[ptr] = value; }
+            else { Add(key, value); }
         }
     }
 }

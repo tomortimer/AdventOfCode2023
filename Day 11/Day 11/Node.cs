@@ -7,10 +7,13 @@ namespace Day_11
     {
         List<Tuple<int, int>> transformations;
         char type;
-        public Node(List<Tuple<int, int>> transformations, char type)
+        public Node(char type)
         {
-            this.transformations = transformations;
             this.type = type;
+        }
+        public override string ToString()
+        {
+            return type.ToString();
         }
     }
 }

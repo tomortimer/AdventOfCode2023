@@ -222,7 +222,9 @@ namespace MorteTools
 
         public int GetIndex(T inp)
         {
-            return Find(inp, head, 0);
+            int tmp = Find(inp, head, 0);
+            if (!head.GetData().Equals(inp) && tmp == 0) { tmp = -1; }
+            return tmp;
         }
 
         private int Find(T inp, ListNode<T> node, int index)

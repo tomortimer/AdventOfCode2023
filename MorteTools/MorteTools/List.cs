@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MorteTools
 {
@@ -247,6 +248,30 @@ namespace MorteTools
                 }
             }
             else { return -1; }
+        }
+
+        public void Remove(T inp)
+        {
+            List<int> toRemove = new List<int>();
+            Remove(inp, head, ref toRemove);
+            for(int i = Count() -1 ; i >= 0; i--)
+            {
+                RemoveAt(toRemove[i]);
+            }
+        }
+        private void Remove(T inp, ListNode<T> node, ref List<int> removeIndexes, int ctr = 0)
+        {
+            if(node != null)
+            {
+                if (node.GetData().Equals(inp))
+                {
+                    removeIndexes.Add(ctr);
+                }
+                if(node.next != null)
+                {
+                    Remove(inp, node.next, ref removeIndexes, ctr + 1);
+                }
+            }
         }
 
         public IEnumerator<T> GetEnumerator()

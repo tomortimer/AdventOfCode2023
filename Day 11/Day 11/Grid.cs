@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Transactions;
 using MorteTools;
@@ -8,9 +9,12 @@ namespace Day_11
     {
         private Node[,] nodes;
         Dictionary<int, Tuple<int,int>> hashtagNodes;
+        System.Collections.Generic.List<int> expandedColumns;
+        System.Collections.Generic.List<int> expandedRows;
         int width;
         int height;
         int hashtagNodeCtr;
+        int expansionRate;
         public Grid(int width, int height)
         {
             this.width = width;
@@ -18,6 +22,9 @@ namespace Day_11
             nodes = new Node[width, height];
             hashtagNodes = new Dictionary<int, Tuple<int,int>>();
             hashtagNodeCtr = 0;
+            expandedColumns = new System.Collections.Generic.List<int>();
+            expandedRows = new System.Collections.Generic.List<int>();
+            expansionRate = 2;
         }
 
         public void AddNode(char type, int x, int y)
@@ -38,7 +45,7 @@ namespace Day_11
 
         public void AddColumn(int index, char symbol)
         {
-            Node[,] tmp = nodes;
+            /*Node[,] tmp = nodes;
             nodes = new Node[width + 1, height];
             width++;
             for (int y = 0; y < height; y++)
@@ -60,12 +67,17 @@ namespace Day_11
                     nodes[x + 1, y] = tmp[x, y];
                 }
                 nodes[index, y] = new Node(symbol);
+            }*/
+            expandedColumns.Add(index);
+            foreach(KeyValuePair<int, Tuple<int,int>> pair in hashtagNodes) 
+            {
+                if(pair.value.Item1 >= index) { hashtagNodes[pair.key] = new Tuple<int,int>(pair.value.Item1 + expansionRate, pair.value.Item2); }
             }
         }
 
         public void AddRow(int index, char symbol) 
         {
-            Node[,] tmp = nodes;
+            /*Node[,] tmp = nodes;
             nodes = new Node[width, height + 1];
             height++;
             //preserve below index
@@ -94,6 +106,11 @@ namespace Day_11
             for(int x = 0; x < width; x++)
             {
                 nodes[x, index] = new Node(symbol);
+            }*/
+            expandedRows.Add(index);
+            foreach (KeyValuePair<int, Tuple<int, int>> pair in hashtagNodes)
+            {
+                if (pair.value.Item2 >= index) { hashtagNodes[pair.key] = new Tuple<int, int>(pair.value.Item1, pair.value.Item2+expansionRate-1); }
             }
         }
 
@@ -117,13 +134,14 @@ namespace Day_11
             return isRowOneSymbol;
         }
 
-        public int DistanceBetween(int nodeOne, int nodeTwo)
+        public long DistanceBetween(int nodeOne, int nodeTwo)
         {
             Tuple<int,int> nodeOneCoord = hashtagNodes[nodeOne];
             Tuple<int,int> nodeTwoCoord = hashtagNodes[nodeTwo];
-            int xDiff = Math.Abs(nodeOneCoord.Item1 -  nodeTwoCoord.Item1);
-            int yDiff = Math.Abs(nodeOneCoord.Item2 - nodeTwoCoord.Item2);
-            return xDiff+yDiff;
+            long xDiff = Math.Abs(nodeOneCoord.Item1 -  nodeTwoCoord.Item1);
+            long yDiff = Math.Abs(nodeOneCoord.Item2 - nodeTwoCoord.Item2);
+            long total = xDiff + yDiff;
+            return total;
         }
 
         public int GetNumSigNodes()

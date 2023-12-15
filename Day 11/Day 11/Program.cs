@@ -29,12 +29,14 @@ namespace Day_11
                 if (grid.IsColumnOneSymbol(x)) { grid.AddColumn(x, '.'); Console.WriteLine("Expanded Column: " + x);x++; }
             }
 
-            grid.PrintGrid();
+            //grid.PrintGrid();
             System.Collections.Generic.List<Tuple<int, int>> pairs = GenerateUniquePairs(grid.GetNumSigNodes());
-            int sum = 0;
+            long sum = 0;
             foreach(Tuple<int, int> pair in pairs)
             {
-                sum += grid.DistanceBetween(pair.Item1, pair.Item2);
+                long tmp = grid.DistanceBetween(pair.Item1, pair.Item2);
+                Console.WriteLine("Distance between " + pair.Item1 + " & " + pair.Item2 + " = " + tmp);
+                sum += tmp;
             }
             Console.WriteLine(sum);
 

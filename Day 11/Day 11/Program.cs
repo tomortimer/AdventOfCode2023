@@ -9,7 +9,8 @@ namespace Day_11
         {
             FileParser fp = new FileParser();
             List<string> lines = fp.GetLinesFromTxt("input.txt");
-            Grid grid = new Grid(lines[0].Length, lines.Count());
+            int expansionRate = 1000000;
+            Grid grid = new Grid(lines[0].Length, lines.Count(), expansionRate);
             for(int y = 0; y < grid.Height;  y++)
             {
                 for(int x = 0; x < grid.Width; x++)
@@ -18,15 +19,26 @@ namespace Day_11
                 }
             }
             
+            List<int> columnsToExpand = new List<int>();
+            List<int> rowsToExpand = new List<int>();
             //expand rows if necessary
-            for(int y = 0; y < grid.Height; y++) 
+            for (int y = 0; y < grid.Height; y++) 
             {
-                if (grid.IsRowOneSymbol(y)) { grid.AddRow(y, '.'); Console.WriteLine("Expanded Row: " + y);y++; }
+                if (grid.IsRowOneSymbol(y)) { rowsToExpand.Add(y); }
             }
             //expand columns if necessary
             for(int x = 0; x < grid.Width; x++)
             {
-                if (grid.IsColumnOneSymbol(x)) { grid.AddColumn(x, '.'); Console.WriteLine("Expanded Column: " + x);x++; }
+                if (grid.IsColumnOneSymbol(x)) { columnsToExpand.Add(x); }
+            }
+
+            for(int x = 0; x < columnsToExpand.Count(); x++)
+            {
+                grid.AddColumn(columnsToExpand[x] + x * expansionRate, '.');
+            }
+            for (int y = 0; y < rowsToExpand.Count(); y++)
+            {
+                grid.AddRow(rowsToExpand[y] + y * expansionRate, '.');
             }
 
             //grid.PrintGrid();

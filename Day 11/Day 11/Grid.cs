@@ -15,7 +15,7 @@ namespace Day_11
         int height;
         int hashtagNodeCtr;
         int expansionRate;
-        public Grid(int width, int height)
+        public Grid(int width, int height, int expansion)
         {
             this.width = width;
             this.height = height;
@@ -24,7 +24,7 @@ namespace Day_11
             hashtagNodeCtr = 0;
             expandedColumns = new System.Collections.Generic.List<int>();
             expandedRows = new System.Collections.Generic.List<int>();
-            expansionRate = 2;
+            expansionRate = expansion;
         }
 
         public void AddNode(char type, int x, int y)
@@ -45,9 +45,8 @@ namespace Day_11
 
         public void AddColumn(int index, char symbol)
         {
-            /*Node[,] tmp = nodes;
-            nodes = new Node[width + 1, height];
-            width++;
+            Node[,] tmp = nodes;
+            nodes = new Node[width + expansionRate - 1, height];
             for (int y = 0; y < height; y++)
             {
                 //preserve before shift
@@ -56,30 +55,30 @@ namespace Day_11
                     nodes[x,y] = tmp[x,y];
                 }
                 //now do after shift
-                for(int x = index; x < width - 1; x++)
+                for(int x = index; x < width; x++)
                 {
                     if (tmp[x,y].ToString() != ".") 
                     {
                         int pos = Convert.ToInt32(tmp[x, y].ToString());
                         Tuple<int, int> tmpCoord = hashtagNodes[pos];
-                        hashtagNodes[pos] = new Tuple<int, int>(tmpCoord.Item1 + 1, tmpCoord.Item2);
+                        hashtagNodes[pos] = new Tuple<int, int>(tmpCoord.Item1 + expansionRate - 1, tmpCoord.Item2);
                     }
-                    nodes[x + 1, y] = tmp[x, y];
+                    nodes[x +expansionRate - 1, y] = tmp[x, y];
                 }
-                nodes[index, y] = new Node(symbol);
-            }*/
-            expandedColumns.Add(index);
-            foreach(KeyValuePair<int, Tuple<int,int>> pair in hashtagNodes) 
-            {
-                if(pair.value.Item1 >= index) { hashtagNodes[pair.key] = new Tuple<int,int>(pair.value.Item1 + expansionRate, pair.value.Item2); }
+                for(int i =0; i < expansionRate; i++)
+                {
+                    nodes[index+i, y] = new Node(symbol);
+                }
+                
             }
+            width = width + expansionRate - 1;
         }
 
         public void AddRow(int index, char symbol) 
         {
-            /*Node[,] tmp = nodes;
-            nodes = new Node[width, height + 1];
-            height++;
+            Node[,] tmp = nodes;
+            nodes = new Node[width, height + expansionRate - 1];
+            
             //preserve below index
             for(int y = 0; y < index; y++)
             {
@@ -89,7 +88,7 @@ namespace Day_11
                 }
             }
             //now shift necessary
-            for(int y = index; y < height - 1; y++)
+            for(int y = index; y < height; y++)
             {
                 for(int x = 0; x < width; x++)
                 {
@@ -97,21 +96,20 @@ namespace Day_11
                     {
                         int pos = Convert.ToInt32(tmp[x, y].ToString());
                         Tuple<int, int> tmpCoord = hashtagNodes[pos];
-                        hashtagNodes[pos] = new Tuple<int, int>(tmpCoord.Item1, tmpCoord.Item2+1);
+                        hashtagNodes[pos] = new Tuple<int, int>(tmpCoord.Item1, tmpCoord.Item2+expansionRate-1);
                     }
-                    nodes[x, y + 1] = tmp[x, y];
+                    nodes[x, y + expansionRate-1] = tmp[x, y];
                 }
             }
             //fill in symbols
             for(int x = 0; x < width; x++)
             {
-                nodes[x, index] = new Node(symbol);
-            }*/
-            expandedRows.Add(index);
-            foreach (KeyValuePair<int, Tuple<int, int>> pair in hashtagNodes)
-            {
-                if (pair.value.Item2 >= index) { hashtagNodes[pair.key] = new Tuple<int, int>(pair.value.Item1, pair.value.Item2+expansionRate-1); }
+                for(int i = 0; i < expansionRate; i++)
+                {
+                    nodes[x, index+i] = new Node(symbol);
+                }
             }
+            height = height + expansionRate - 1;
         }
 
         public bool IsColumnOneSymbol(int index)

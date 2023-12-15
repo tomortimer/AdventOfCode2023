@@ -31,7 +31,7 @@ namespace Day_11
             if(type == '#') 
             {
                 hashtagNodes.Add(hashtagNodeCtr, new Tuple<int,int>(x,y));
-                nodes[x, y] = new Node(Convert.ToChar(hashtagNodeCtr.ToString()));
+                nodes[x, y] = new Node(Convert.ToInt32(hashtagNodeCtr.ToString()));
                 hashtagNodeCtr++;
             }
         }
@@ -124,6 +124,11 @@ namespace Day_11
             int xDiff = Math.Abs(nodeOneCoord.Item1 -  nodeTwoCoord.Item1);
             int yDiff = Math.Abs(nodeOneCoord.Item2 - nodeTwoCoord.Item2);
             return xDiff+yDiff;
+        }
+
+        public int GetNumSigNodes()
+        {
+            return hashtagNodes.Count();
         }
         
         public int Height { get { return height; } set { height = value; } }

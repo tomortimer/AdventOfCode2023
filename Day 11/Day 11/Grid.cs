@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Transactions;
 using MorteTools;
 namespace Day_11
 {
@@ -117,18 +119,11 @@ namespace Day_11
 
         public int DistanceBetween(int nodeOne, int nodeTwo)
         {
-            // can't just assume direct distance is equal to shortest path
-            Tuple<int,int> startCoord = hashtagNodes[nodeOne];
-            List<Tuple<int,int>> toVisit = new List<Tuple<int,int>>();
-            List<Tuple<int, int>> visited = new List<Tuple<int, int>>();
-            //maps coord to shortest distance
-            Dictionary<Tuple<int,int>, int> finalised = new Dictionary<Tuple<int, int>, int>();
-            toVisit.Add(startCoord);
-            while (!finalised.Contains(hashtagNodes[nodeTwo]))
-            {
-
-            }
-            return finalised[hashtagNodes[nodeTwo]];
+            Tuple<int,int> nodeOneCoord = hashtagNodes[nodeOne];
+            Tuple<int,int> nodeTwoCoord = hashtagNodes[nodeTwo];
+            int xDiff = Math.Abs(nodeOneCoord.Item1 -  nodeTwoCoord.Item1);
+            int yDiff = Math.Abs(nodeOneCoord.Item2 - nodeTwoCoord.Item2);
+            return xDiff+yDiff;
         }
         
         public int Height { get { return height; } set { height = value; } }

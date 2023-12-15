@@ -46,15 +46,9 @@ namespace Day_11
         public void AddColumn(int index, char symbol)
         {
             Node[,] tmp = nodes;
-            nodes = new Node[width + expansionRate - 1, height];
             for (int y = 0; y < height; y++)
             {
-                //preserve before shift
-                for (int x = 0; x < index; x++)
-                {
-                    nodes[x,y] = tmp[x,y];
-                }
-                //now do after shift
+                //shift when greater
                 for(int x = index; x < width; x++)
                 {
                     if (tmp[x,y].ToString() != ".") 
@@ -63,30 +57,15 @@ namespace Day_11
                         Tuple<int, int> tmpCoord = hashtagNodes[pos];
                         hashtagNodes[pos] = new Tuple<int, int>(tmpCoord.Item1 + expansionRate - 1, tmpCoord.Item2);
                     }
-                    nodes[x +expansionRate - 1, y] = tmp[x, y];
-                }
-                for(int i =0; i < expansionRate; i++)
-                {
-                    nodes[index+i, y] = new Node(symbol);
                 }
                 
             }
-            width = width + expansionRate - 1;
         }
 
         public void AddRow(int index, char symbol) 
         {
             Node[,] tmp = nodes;
-            nodes = new Node[width, height + expansionRate - 1];
             
-            //preserve below index
-            for(int y = 0; y < index; y++)
-            {
-                for(int x = 0; x < width; x++)
-                {
-                    nodes[x, y] = tmp[x, y];
-                }
-            }
             //now shift necessary
             for(int y = index; y < height; y++)
             {
@@ -98,18 +77,8 @@ namespace Day_11
                         Tuple<int, int> tmpCoord = hashtagNodes[pos];
                         hashtagNodes[pos] = new Tuple<int, int>(tmpCoord.Item1, tmpCoord.Item2+expansionRate-1);
                     }
-                    nodes[x, y + expansionRate-1] = tmp[x, y];
                 }
             }
-            //fill in symbols
-            for(int x = 0; x < width; x++)
-            {
-                for(int i = 0; i < expansionRate; i++)
-                {
-                    nodes[x, index+i] = new Node(symbol);
-                }
-            }
-            height = height + expansionRate - 1;
         }
 
         public bool IsColumnOneSymbol(int index)

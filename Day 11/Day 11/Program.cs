@@ -16,8 +16,20 @@ namespace Day_11
                     grid.AddNode(lines[y][x], x, y);
                 }
             }
-            grid.InsertColumn(3, '.');
+            
+            //expand rows if necessary
+            for(int y = 0; y < grid.Height; y++) 
+            {
+                if (grid.IsRowOneSymbol(y)) { grid.AddRow(y, '.'); Console.WriteLine("Expanded Row: " + y);y++; }
+            }
+            //expand columns if necessary
+            for(int x = 0; x < grid.Width; x++)
+            {
+                if (grid.IsColumnOneSymbol(x)) { grid.AddColumn(x, '.'); Console.WriteLine("Expanded Column: " + x);x++; }
+            }
+
             grid.PrintGrid();
+            Console.WriteLine(grid.DistanceBetween(0, 6));
         }
     }
 }

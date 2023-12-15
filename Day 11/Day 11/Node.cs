@@ -5,7 +5,6 @@ namespace Day_11
 {
     internal class Node
     {
-        List<Tuple<int, int>> transformations;
         char type;
         public Node(char type)
         {

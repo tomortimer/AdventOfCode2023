@@ -19,7 +19,7 @@
                 maps.Add(new Map(tmp));
                 lineCtr++;
             }
-            int columnSum = 0;
+            /*int columnSum = 0;
             int rowSum = 0;
             for(int i = 0; i < maps.Count; i++) 
             {
@@ -34,7 +34,7 @@
                 else { columnSum += tmp; }
             }
             int sum = columnSum + (rowSum * 100);
-            Console.WriteLine(sum);
+            Console.WriteLine(sum);*/
         }
     }
 }

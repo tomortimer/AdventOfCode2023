@@ -110,12 +110,9 @@ namespace Day_13
                     //validate symmetry
                     bool valid = ValidateXSymmetry(y);
                     if(valid) { ret = y; Console.WriteLine("Horizontal Alt symmetry found at: " + y+ " Char swapped at X: "+bizarreCharPos.Item1 +" Y: "+bizarreCharPos.Item2); }
-                    else
-                    {
-                        //otherwise revrse
-                        if (map[bizarreCharPos.Item1, bizarreCharPos.Item2] == '#') { map[bizarreCharPos.Item1, bizarreCharPos.Item2] = '.'; }
-                        else { map[bizarreCharPos.Item1, bizarreCharPos.Item2] = '#'; }
-                    }
+                    //reverse change
+                    if (map[bizarreCharPos.Item1, bizarreCharPos.Item2] == '#') { map[bizarreCharPos.Item1, bizarreCharPos.Item2] = '.'; }
+                    else { map[bizarreCharPos.Item1, bizarreCharPos.Item2] = '#'; }
                 }
             }
             return ret;
@@ -178,12 +175,9 @@ namespace Day_13
                     //validate symmetry
                     bool valid = ValidateYSymmetry(x);
                     if (valid) { ret = x; Console.WriteLine("Vertical Alt Symmetry at: " + x + " Char at X: " + bizarreCharPos.Item1 + " Y: " + bizarreCharPos.Item2); }
-                    else
-                    {
-                        //otherwise revrse
-                        if (map[bizarreCharPos.Item1, bizarreCharPos.Item2] == '#') { map[bizarreCharPos.Item1, bizarreCharPos.Item2] = '.'; }
-                        else { map[bizarreCharPos.Item1, bizarreCharPos.Item2] = '#'; }
-                    }
+                    //MAKE SURE TO UNDO CHANGES!!!
+                    if (map[bizarreCharPos.Item1, bizarreCharPos.Item2] == '#') { map[bizarreCharPos.Item1, bizarreCharPos.Item2] = '.'; }
+                    else { map[bizarreCharPos.Item1, bizarreCharPos.Item2] = '#'; }
                 }
             }
             return ret;

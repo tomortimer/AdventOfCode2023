@@ -23,15 +23,20 @@
             int rowSum = 0;
             for (int i = 0; i < maps.Count; i++)
             {
+                Console.WriteLine("Map: " + i);
                 Map m = maps[i];
-                int tmp = m.FindYAxisReflection();
-                if (tmp == -1)
+                int YWithSmudge = m.FindYAxisReflection();
+                if (YWithSmudge > 0) { columnSum += YWithSmudge; }
+                else
                 {
-                    tmp = m.FindXAxisReflection();
-                    if (tmp != -1) { rowSum += tmp; }
-                    else { Console.WriteLine("pattern " + i + " is missing reflection"); }
+                    int XWithSmudge = m.FindXAxisReflection();
+                    if (XWithSmudge > 0) { rowSum += XWithSmudge; }
+                    else
+                    {
+                        Console.WriteLine("Missing reflection");
+                    }
                 }
-                else { columnSum += tmp; }
+                
             }
             int sum = columnSum + (rowSum * 100);
             Console.WriteLine(sum);

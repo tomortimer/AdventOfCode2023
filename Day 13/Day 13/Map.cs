@@ -28,6 +28,50 @@ namespace Day_13
             }
         }
 
+        public int FindXAxisReflectionPartOne()
+        {
+            int ret = -1;
+            for (int y = 0; y < height; y++)
+            {
+                int columnMatchCtr = 0;
+                //go across all columns
+                for (int x = 0; x < width; x++)
+                {
+                    int sampleLength = y;
+                    if (sampleLength > height - y) { sampleLength = height - y; }
+                    string column = ConstructColumn(x);
+                    string upToLine = column.Substring(y - sampleLength, sampleLength);
+                    string afterLine = Reverse(column.Substring(y, sampleLength));
+                    if (upToLine == afterLine && y != 0) { columnMatchCtr++; }
+                    else { x = width; }
+                }
+                if (columnMatchCtr == width) { ret = y; y = height; }
+            }
+            return ret;
+        }
+        //default ret as -1
+        public int FindYAxisReflectionPartOne()
+        {
+            int ret = -1;
+            for (int x = 0; x < width; x++)
+            {
+                int rowMatchCtr = 0;
+                //go across all rows
+                for (int y = 0; y < height; y++)
+                {
+                    int sampleLength = x;
+                    if (sampleLength > width - x) { sampleLength = width - x; }
+                    string row = ConstructRow(y);
+                    string upToLine = row.Substring(x - sampleLength, sampleLength);
+                    string afterLine = Reverse(row.Substring(x, sampleLength));
+                    if (upToLine == afterLine && x != 0) { rowMatchCtr++; }
+                    else { y = height; }
+                }
+                if (rowMatchCtr == height) { ret = x; x = width; }
+            }
+            return ret;
+        }
+
         //default return is -1
         public int FindXAxisReflection()
         {
@@ -52,10 +96,11 @@ namespace Day_13
                     {
                         Tuple<int, int> tmp = CountMatchingCharsAndFindPos(upToLine, afterLine);
                         matchingChars += tmp.Item1;
-                        bizarreCharPos = new Tuple<int, int>(x, tmp.Item2);
+                        int yCoord = y - sampleLength + tmp.Item2;
+                        bizarreCharPos = new Tuple<int, int>(x, yCoord);
                     }
                 }
-                //if (columnMatchCtr == width) { ret = y;}
+                if (columnMatchCtr == width) { Console.WriteLine("Horizontal Symmetry at: " + y); }
                 //is one off attempt symmetry with switch
                 if(matchingChars + 2 == necessaryMatches) 
                 {
@@ -64,7 +109,7 @@ namespace Day_13
                     else { map[bizarreCharPos.Item1, bizarreCharPos.Item2] = '#'; }
                     //validate symmetry
                     bool valid = ValidateXSymmetry(y);
-                    if(valid) { ret = y; y = height; }
+                    if(valid) { ret = y; Console.WriteLine("Horizontal Alt symmetry found at: " + y+ " Char swapped at X: "+bizarreCharPos.Item1 +" Y: "+bizarreCharPos.Item2); }
                     else
                     {
                         //otherwise revrse
@@ -118,10 +163,12 @@ namespace Day_13
                     {
                         Tuple<int, int> tmp = CountMatchingCharsAndFindPos(upToLine, afterLine);
                         matchingChars += tmp.Item1;
-                        bizarreCharPos = new Tuple<int, int>(tmp.Item2, y);
+                        int xCoord = x - sampleLength + tmp.Item2;
+                        bizarreCharPos = new Tuple<int, int>(xCoord, y);
                     }
                 }
-                //if(rowMatchCtr == height) { ret = x; x = width; }
+                if(rowMatchCtr == height) { 
+                    Console.WriteLine("Vertical symmetry at: "+x); }
                 //is one off attempt symmetry with switch
                 if (matchingChars + 2 == necessaryMatches)
                 {
@@ -130,7 +177,7 @@ namespace Day_13
                     else { map[bizarreCharPos.Item1, bizarreCharPos.Item2] = '#'; }
                     //validate symmetry
                     bool valid = ValidateYSymmetry(x);
-                    if (valid) { ret = x; x = width; }
+                    if (valid) { ret = x; Console.WriteLine("Vertical Alt Symmetry at: " + x + " Char at X: " + bizarreCharPos.Item1 + " Y: " + bizarreCharPos.Item2); }
                     else
                     {
                         //otherwise revrse
@@ -169,7 +216,7 @@ namespace Day_13
                 if (firstHalf[i] == secondHalf[i]) {  matchingCtr+=2; }
                 else
                 {
-                    { misMatchIndex = i; }
+                    misMatchIndex = i;
                 }
             }
             Tuple<int, int> ret = new Tuple<int, int>(matchingCtr, misMatchIndex);

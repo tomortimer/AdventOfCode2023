@@ -100,27 +100,65 @@ namespace Day_13
             int ret = -1;
             for (int x = 0; x < width; x++)
             {
+                int sampleLength = x;
+                if (sampleLength > width - x) { sampleLength = width - x; }
                 int rowMatchCtr = 0;
+                //calculate necessary matching chars
+                int necessaryMatches = sampleLength * 2 * height;
+                Tuple<int, int> bizarreCharPos = new Tuple<int, int>(-1, -1);
+                int matchingChars = 0;
                 //go across all rows
                 for (int y = 0; y < height; y++)
                 {
-                    int sampleLength = x;
-                    if (sampleLength > width - x) { sampleLength = width - x; }
                     string row = ConstructRow(y);
                     string upToLine = row.Substring(x - sampleLength, sampleLength);
                     string afterLine = Reverse(row.Substring(x, sampleLength));
-                    if(upToLine == afterLine && x != 0) {  rowMatchCtr++; }
-                    else { y = height; }
+                    if (upToLine == afterLine && x != 0) { rowMatchCtr++; matchingChars += sampleLength * 2; }
+                    else
+                    {
+                        Tuple<int, int> tmp = CountMatchingCharsAndFindPos(upToLine, afterLine);
+                        matchingChars += tmp.Item1;
+                        bizarreCharPos = new Tuple<int, int>(tmp.Item2, y);
+                    }
                 }
-                if(rowMatchCtr == height) { ret = x; x = width; }
+                //if(rowMatchCtr == height) { ret = x; x = width; }
+                //is one off attempt symmetry with switch
+                if (matchingChars + 2 == necessaryMatches)
+                {
+                    //invert symbol
+                    if (map[bizarreCharPos.Item1, bizarreCharPos.Item2] == '#') { map[bizarreCharPos.Item1, bizarreCharPos.Item2] = '.'; }
+                    else { map[bizarreCharPos.Item1, bizarreCharPos.Item2] = '#'; }
+                    //validate symmetry
+                    bool valid = ValidateYSymmetry(x);
+                    if (valid) { ret = x; x = width; }
+                    else
+                    {
+                        //otherwise revrse
+                        if (map[bizarreCharPos.Item1, bizarreCharPos.Item2] == '#') { map[bizarreCharPos.Item1, bizarreCharPos.Item2] = '.'; }
+                        else { map[bizarreCharPos.Item1, bizarreCharPos.Item2] = '#'; }
+                    }
+                }
             }
             return ret;
         }
 
-        /*public bool ValidateYSymmetry(int x)
+        public bool ValidateYSymmetry(int x)
         {
-            
-        }*/
+            int rowMatchCtr = 0;
+            int sampleLength = x;
+            if (sampleLength > width - x) { sampleLength = width - x; }
+            for (int y = 0; y < height; y++)
+            {
+                string row = ConstructRow(y);
+                string upToLine = row.Substring(x - sampleLength, sampleLength);
+                string afterLine = Reverse(row.Substring(x, sampleLength));
+                if (upToLine == afterLine && x != 0) { rowMatchCtr++; }
+                else { y = height; }
+            }
+            bool ret = false;
+            if (rowMatchCtr == height) { ret = true; }
+            return ret;
+        }
 
         public Tuple<int, int> CountMatchingCharsAndFindPos(string firstHalf, string secondHalf) 
         {

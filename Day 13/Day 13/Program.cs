@@ -19,6 +19,22 @@
                 maps.Add(new Map(tmp));
                 lineCtr++;
             }
+            int columnSum = 0;
+            int rowSum = 0;
+            for(int i = 0; i < maps.Count; i++) 
+            {
+                Map m = maps[i];
+                int tmp = m.FindYAxisReflection();
+                if(tmp == -1)
+                {
+                    tmp = m.FindXAxisReflection();
+                    if (tmp != -1) { rowSum += tmp; }
+                    else { Console.WriteLine("pattern " + i + " is missing reflection"); }
+                }
+                else { columnSum += tmp; }
+            }
+            int sum = columnSum + (rowSum * 100);
+            Console.WriteLine(sum);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace MorteTools
+﻿using System.Net;
+
+namespace MorteTools
 {
     public class FileParser
     {
@@ -40,6 +42,17 @@
             }
             reader.Close();
             return lines;
+        }
+
+        public List<int> GetListInt(string inp, char splitChar)
+        {
+            string[] strings = inp.Split(splitChar);
+            List<int> ret = new List<int>();
+            foreach(string s in strings)
+            {
+                ret.Add(int.Parse(s));
+            }
+            return ret;
         }
     }
 }

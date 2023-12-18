@@ -183,7 +183,7 @@ namespace MorteTools
         }
 
         //use this for comparisons
-        public string ConvertToString()
+        public override string ToString()
         {
             string tmpstr = "";
             for (int x = 0; x < Count(); x++)
@@ -274,6 +274,12 @@ namespace MorteTools
                     Remove(inp, node.next, ref removeIndexes, ctr + 1);
                 }
             }
+        }
+
+        public List<T> Clone()
+        {
+            List<T> ret = [.. this];
+            return ret;
         }
 
         public IEnumerator<T> GetEnumerator()

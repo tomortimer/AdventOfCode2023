@@ -51,6 +51,7 @@ namespace Day_16
             {
                 List<Beam> beams = new List<Beam> { beamsToTest[x] };
                 List<Tuple<int, int>> visited = new List<Tuple<int, int>>();
+                List<Beam> splitBeams = new List<Beam>();
                 int repeatCtr = 0;
                 while (beams.Count() > 0)
                 {
@@ -64,8 +65,6 @@ namespace Day_16
                             uniqueCtr++;
                             visited.Add(pos);
                         }
-
-
 
                         switch (grid[(int)beams[i].pos.X, (int)beams[i].pos.Y])
                         {
@@ -108,11 +107,7 @@ namespace Day_16
                         if (beams[i].pos.X < 0 || beams[i].pos.X >= width || beams[i].pos.Y < 0 || beams[i].pos.Y >= height)
                         {
                             beams.RemoveAt(i);
-                            for(int j = 0; j < beamsToTest.Count; j++)
-                            {
-                                if (beamsToTest[j].ToString() == completedMaybe.ToString()) { 
-                                    beamsToTest.RemoveAt(j); }
-                            }
+                            RemoveBeamFromList(completedMaybe, ref beamsToTest);
                         }
 
                     }
@@ -126,12 +121,40 @@ namespace Day_16
 
                     foreach (Beam beam in newBeams)
                     {
-                        beams.Add(beam);
+                        if (!ListContainsBeam(beam, splitBeams))
+                        {
+                            splitBeams.Add(beam);
+                            beams.Add(beam); 
+                        }
                     }
                 }
                 if(visited.Count > greatestScore) { greatestScore = visited.Count; }
             }
             Console.WriteLine(greatestScore);
+        }
+
+        static void RemoveBeamFromList(Beam beam, ref List<Beam> list)
+        {
+            for (int j = 0; j < list.Count; j++)
+            {
+                if (list[j].ToString() == beam.ToString())
+                {
+                    list.RemoveAt(j);
+                }
+            }
+        }
+
+        static bool ListContainsBeam(Beam beam, List<Beam> list)
+        {
+            bool ret = false;
+            for (int j = 0; j < list.Count; j++)
+            {
+                if (list[j].ToString() == beam.ToString())
+                {
+                    ret = true;
+                }
+            }
+            return ret;
         }
     }
 }

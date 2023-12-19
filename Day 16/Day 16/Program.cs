@@ -36,17 +36,22 @@ namespace Day_16
                 { (int)Directions.Up, new Vector2(0, -1) }
             };
             List<Tuple<int,int>> visited = new List<Tuple<int,int>>();
+            int repeatCtr = 0;
             while(beams.Count() > 0)
             {
+                int uniqueCtr = 0;
                 List<Beam> newBeams = new List<Beam>();
                 for (int i = 0; i < beams.Count(); i++)
                 {
                     Tuple<int, int> pos = new Tuple<int, int>((int)beams[i].pos.X, (int)beams[i].pos.Y);
-                    if (!visited.Contains(pos)) { visited.Add(pos); }
-                    beams[i].pos += transformations[beams[i].direction];
-                    if (beams[i].pos.X < 0 || beams[i].pos.X >= width || beams[i].pos.Y < 0 || beams[i].pos.Y >= height) { beams.RemoveAt(i); }
-                    else
+                    if (!visited.Contains(pos))
                     {
+                        uniqueCtr++;
+                        visited.Add(pos);
+                    }
+
+                    
+                    
                         switch(grid[(int)beams[i].pos.X, (int)beams[i].pos.Y])
                         {
                             case '/':
@@ -79,11 +84,22 @@ namespace Day_16
                                 {
                                     beams[i].direction = (int)Directions.Up;
                                     newBeams.Add(new Beam(new Vector2(beams[i].pos.X, beams[i].pos.Y), (int)Directions.Down));
-                                }
-                                break;
-                        }
+                            }
+                           break;
                     }
+                    beams[i].pos += transformations[beams[i].direction];
+                    if (beams[i].pos.X < 0 || beams[i].pos.X >= width || beams[i].pos.Y < 0 || beams[i].pos.Y >= height)
+                    {
+                        beams.RemoveAt(i);
+                    }
+
                 }
+                //annoying little break clause
+                if(uniqueCtr == 0) {
+                    repeatCtr++; }
+                else { repeatCtr = 0; }
+                if(repeatCtr == visited.Count()) { break; }
+
                 foreach(Beam beam in newBeams)
                 {
                     beams.Add(beam);

@@ -1,4 +1,6 @@
-﻿namespace Day_17
+﻿using System.Runtime.CompilerServices;
+
+namespace Day_17
 {
     internal class Program
     {
@@ -29,38 +31,41 @@
             
 
             Node current;
-            Dictionary<Tuple<int, int>, int> finalised = new Dictionary<Tuple<int, int>, int>();
+            List<string> visited = new List<string>();
             //looking for coord (12,12)
             Tuple<int, int> end = new Tuple<int, int>(width - 1, height -1);
-            while (!finalised.ContainsKey(end))
+            do
             {
                 nodes = nodes.OrderBy(x => x.distance).ToList();
                 current = nodes[0];
                 nodes.RemoveAt(0);
-                if (!finalised.ContainsKey(new Tuple<int, int>(current.x, current.y)) && NodeInBounds(current, width, height)){ finalised.Add(new Tuple<int, int>(current.x, current.y), current.distance); }
-                if(NodeInBounds(current, width, height))
+                if (!visited.Contains(current.ToString()) && NodeInBounds(current, width, height))
                 {
-                    //branch turns here
-                    nodes.Add(new Node(grid[current.x, current.y].cost, current.x, current.y, current.yTrans, -current.xTrans));
-                    nodes.Last().distance = current.distance;
-                    nodes.Last().Move(grid);
-                    nodes.Add(new Node(grid[current.x, current.y].cost, current.x, current.y, -current.yTrans, current.xTrans));
-                    nodes.Last().distance = current.distance;
-                    nodes.Last().Move(grid);
-
-                    //keep going straight if less then 3 consecutive steps
-                    if (current.stepCtr < 3)
+                    visited.Add(current.ToString());
+                    if (NodeInBounds(current, width, height))
                     {
-                        nodes.Add(new Node(grid[current.x, current.y].cost, current.x, current.y, current.xTrans, current.yTrans));
-                        nodes.Last().stepCtr = current.stepCtr;
+                        //branch turns here
+                        nodes.Add(new Node(grid[current.x, current.y].cost, current.x, current.y, current.yTrans, -current.xTrans));
                         nodes.Last().distance = current.distance;
                         nodes.Last().Move(grid);
+                        nodes.Add(new Node(grid[current.x, current.y].cost, current.x, current.y, -current.yTrans, current.xTrans));
+                        nodes.Last().distance = current.distance;
+                        nodes.Last().Move(grid);
+
+                        //keep going straight if less then 3 consecutive steps
+                        if (current.stepCtr < 3)
+                        {
+                            nodes.Add(new Node(grid[current.x, current.y].cost, current.x, current.y, current.xTrans, current.yTrans));
+                            nodes.Last().stepCtr = current.stepCtr;
+                            nodes.Last().distance = current.distance;
+                            nodes.Last().Move(grid);
+                        }
                     }
                 }
                 
-            }
+            }while(!(current.x == width - 1 && current.y == height - 1));
 
-            Console.WriteLine(finalised[end]);
+            Console.WriteLine(current.distance);
         }
 
         static bool NodeInBounds(Node node, int width, int height)

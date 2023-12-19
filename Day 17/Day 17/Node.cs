@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Day_17
 {
+    enum Directions
+    {
+        Up, Right, Down, Left
+    }
     internal class Node
     {
         public int cost;
@@ -32,7 +36,16 @@ namespace Day_17
 
         public override string ToString()
         {
-            return "X:" + x + "Y:" + y + "Val:" + cost;
+            UpdateDirection();
+            return "X:" + x + "Y:" + y + "Dir:" + direction+"Stp:"+stepCtr;
+        }
+
+        private void UpdateDirection()
+        {
+            if(xTrans == 1) { direction = (int)Directions.Right; }
+            else if(xTrans == -1) { direction = (int)Directions.Left; }
+            else if (yTrans == 1) { direction = (int)Directions.Down; }
+            else if(yTrans == -1) { direction = (int)Directions.Up; }
         }
 
         public void Move(Node[,] grid)
@@ -40,7 +53,8 @@ namespace Day_17
             x += xTrans;
             y += yTrans;
             stepCtr++;
-            if(NodeInBounds(this, grid.GetLength(0), grid.GetLength(1))) { distance += grid[x, y].cost; }
+            if(NodeInBounds(this, grid.GetLength(0), grid.GetLength(1))) { 
+                distance += grid[x, y].cost; }
         }
         private bool NodeInBounds(Node node, int width, int height)
         {

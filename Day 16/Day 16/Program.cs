@@ -27,7 +27,7 @@ namespace Day_16
                 }
             }
             //map vector to direction
-            List<Beam> beams = new List<Beam> { new Beam(new Vector2(0,0), (int)Directions.Right) };
+            
             Dictionary<int, Vector2> transformations = new Dictionary<int, Vector2>
             {
                 { (int)Directions.Right, new Vector2(1, 0) },
@@ -35,24 +35,39 @@ namespace Day_16
                 { (int)Directions.Left, new Vector2(-1, 0) },
                 { (int)Directions.Up, new Vector2(0, -1) }
             };
-            List<Tuple<int,int>> visited = new List<Tuple<int,int>>();
-            int repeatCtr = 0;
-            while(beams.Count() > 0)
+            List<Beam> beamsToTest = new List<Beam>();
+            for(int x = 0; x < width; x++)
             {
-                int uniqueCtr = 0;
-                List<Beam> newBeams = new List<Beam>();
-                for (int i = 0; i < beams.Count(); i++)
+                beamsToTest.Add(new Beam(new Vector2(x, 0), (int)Directions.Down));
+                beamsToTest.Add(new Beam(new Vector2(x, height - 1), (int)Directions.Up));
+            }
+            for(int y = 0; y < height; y++)
+            {
+                beamsToTest.Add(new Beam(new Vector2(0, y), (int)Directions.Right));
+                beamsToTest.Add(new Beam(new Vector2(width - 1, y), (int)Directions.Left));
+            }
+            int greatestScore = 0;
+            for (int x = 0; x < beamsToTest.Count; x++)
+            {
+                List<Beam> beams = new List<Beam> { beamsToTest[x] };
+                List<Tuple<int, int>> visited = new List<Tuple<int, int>>();
+                int repeatCtr = 0;
+                while (beams.Count() > 0)
                 {
-                    Tuple<int, int> pos = new Tuple<int, int>((int)beams[i].pos.X, (int)beams[i].pos.Y);
-                    if (!visited.Contains(pos))
+                    int uniqueCtr = 0;
+                    List<Beam> newBeams = new List<Beam>();
+                    for (int i = 0; i < beams.Count(); i++)
                     {
-                        uniqueCtr++;
-                        visited.Add(pos);
-                    }
+                        Tuple<int, int> pos = new Tuple<int, int>((int)beams[i].pos.X, (int)beams[i].pos.Y);
+                        if (!visited.Contains(pos))
+                        {
+                            uniqueCtr++;
+                            visited.Add(pos);
+                        }
 
-                    
-                    
-                        switch(grid[(int)beams[i].pos.X, (int)beams[i].pos.Y])
+
+
+                        switch (grid[(int)beams[i].pos.X, (int)beams[i].pos.Y])
                         {
                             case '/':
                                 switch (beams[i].direction)
@@ -84,28 +99,39 @@ namespace Day_16
                                 {
                                     beams[i].direction = (int)Directions.Up;
                                     newBeams.Add(new Beam(new Vector2(beams[i].pos.X, beams[i].pos.Y), (int)Directions.Down));
+                                }
+                                break;
+                        }
+                        Beam completedMaybe = new Beam(new Vector2(beams[i].pos.X, beams[i].pos.Y), beams[i].direction);
+                        beams[i].pos += transformations[beams[i].direction];
+                        
+                        if (beams[i].pos.X < 0 || beams[i].pos.X >= width || beams[i].pos.Y < 0 || beams[i].pos.Y >= height)
+                        {
+                            beams.RemoveAt(i);
+                            for(int j = 0; j < beamsToTest.Count; j++)
+                            {
+                                if (beamsToTest[j].ToString() == completedMaybe.ToString()) { 
+                                    beamsToTest.RemoveAt(j); }
                             }
-                           break;
+                        }
+
                     }
-                    beams[i].pos += transformations[beams[i].direction];
-                    if (beams[i].pos.X < 0 || beams[i].pos.X >= width || beams[i].pos.Y < 0 || beams[i].pos.Y >= height)
+                    //annoying little break clause
+                    if (uniqueCtr == 0)
                     {
-                        beams.RemoveAt(i);
+                        repeatCtr++;
                     }
+                    else { repeatCtr = 0; }
+                    if (repeatCtr > 5) { break; }
 
+                    foreach (Beam beam in newBeams)
+                    {
+                        beams.Add(beam);
+                    }
                 }
-                //annoying little break clause
-                if(uniqueCtr == 0) {
-                    repeatCtr++; }
-                else { repeatCtr = 0; }
-                if(repeatCtr > 5) { break; }
-
-                foreach(Beam beam in newBeams)
-                {
-                    beams.Add(beam);
-                }
+                if(visited.Count > greatestScore) { greatestScore = visited.Count; }
             }
-            Console.WriteLine(visited.Count());
+            Console.WriteLine(greatestScore);
         }
     }
 }

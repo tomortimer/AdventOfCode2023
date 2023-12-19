@@ -128,7 +128,8 @@ namespace Day_16
                         }
                     }
                 }
-                if(visited.Count > greatestScore) { greatestScore = visited.Count; }
+                if(visited.Count > greatestScore) { 
+                    greatestScore = visited.Count; }
             }
             Console.WriteLine(greatestScore);
         }

@@ -98,7 +98,7 @@ namespace Day_16
                 if(uniqueCtr == 0) {
                     repeatCtr++; }
                 else { repeatCtr = 0; }
-                if(repeatCtr == visited.Count()) { break; }
+                if(repeatCtr > 5) { break; }
 
                 foreach(Beam beam in newBeams)
                 {

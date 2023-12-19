@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace Day_17
 
         public int xTrans;
         public int yTrans;
+        public MorteTools.List<string> history;
 
         public Node(int cost, int x, int y, int xTrans, int yTrans) 
         {
@@ -32,6 +34,7 @@ namespace Day_17
             this.xTrans = xTrans;
             this.yTrans = yTrans;
             stepCtr = 0;
+            history = new MorteTools.List<string>();
         }
 
         public override string ToString()
@@ -50,6 +53,7 @@ namespace Day_17
 
         public void Move(Node[,] grid)
         {
+            history.Add("X:" + x + "Y:" + y);
             x += xTrans;
             y += yTrans;
             stepCtr++;

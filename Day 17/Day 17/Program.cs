@@ -27,7 +27,9 @@ namespace Day_17
                 }
             }
             nodes.Add(new Node(2, 0,0, 1,0));
+            nodes.Add(new Node(2, 0, 0, 0, 1));
             nodes[0].distance = 0;
+            nodes[1].distance = 0;
             
 
             Node current;
@@ -44,28 +46,35 @@ namespace Day_17
                     visited.Add(current.ToString());
                     if (NodeInBounds(current, width, height))
                     {
-                        //branch turns here
-                        nodes.Add(new Node(grid[current.x, current.y].cost, current.x, current.y, current.yTrans, -current.xTrans));
-                        nodes.Last().distance = current.distance;
-                        nodes.Last().Move(grid);
-                        nodes.Add(new Node(grid[current.x, current.y].cost, current.x, current.y, -current.yTrans, current.xTrans));
-                        nodes.Last().distance = current.distance;
-                        nodes.Last().Move(grid);
+                        if (current.stepCtr > 3)
+                        {//branch turns here
+                            nodes.Add(new Node(grid[current.x, current.y].cost, current.x, current.y, current.yTrans, -current.xTrans));
+                            nodes.Last().distance = current.distance;
+                            nodes.Last().history = current.history.Clone();
+                            nodes.Last().Move(grid);
+                            nodes.Add(new Node(grid[current.x, current.y].cost, current.x, current.y, -current.yTrans, current.xTrans));
+                            nodes.Last().distance = current.distance;
+                            nodes.Last().history = current.history.Clone();
+                            nodes.Last().Move(grid);
+
+                        }
 
                         //keep going straight if less then 3 consecutive steps
-                        if (current.stepCtr < 3)
+                        if (current.stepCtr < 10)
                         {
                             nodes.Add(new Node(grid[current.x, current.y].cost, current.x, current.y, current.xTrans, current.yTrans));
                             nodes.Last().stepCtr = current.stepCtr;
                             nodes.Last().distance = current.distance;
+                            nodes.Last().history = current.history.Clone();
                             nodes.Last().Move(grid);
                         }
                     }
                 }
                 
-            }while(!(current.x == width - 1 && current.y == height - 1));
+            }while(!(current.x == width - 1 && current.y == height - 1 && current.stepCtr > 3));
 
             Console.WriteLine(current.distance);
+            Console.WriteLine(current.history.ToString());
         }
 
         static bool NodeInBounds(Node node, int width, int height)

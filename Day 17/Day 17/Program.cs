@@ -74,7 +74,7 @@ namespace Day_17
             }while(!(current.x == width - 1 && current.y == height - 1 && current.stepCtr > 3));
 
             Console.WriteLine(current.distance);
-            Console.WriteLine(current.history.ToString());
+            //Console.WriteLine(current.history.ToString());
         }
 
         static bool NodeInBounds(Node node, int width, int height)

@@ -21,7 +21,12 @@ namespace Day_19
                 i++;
             }
 
-            i++;
+
+
+
+
+            //Part One Stuff:
+            /*i++;
             List<Part> parts = new List<Part>();
             while (i < lines.Count())
             {
@@ -49,7 +54,7 @@ namespace Day_19
             {
                 sum += part.GetScore();
             }
-            Console.WriteLine(sum);
+            Console.WriteLine(sum);*/
         }
     }
 }

@@ -21,8 +21,16 @@ namespace Day_19
                 i++;
             }
 
+            int[] startLower = { 1, 1, 1, 1};
+            int[] startUpper = { 4000, 4000, 4000, 4000 };
 
-
+            //enter w/ bounds
+            //adjust each bound, try every path, passing down bounds
+            // once accept reached, return bounds
+            // once reject reached, return null
+            //have return object be a list so as to collate bounds
+            // sum possible entries
+            //compare upper and lower and expand primary bound unless secondary is not contained or partially in primary
 
 
             //Part One Stuff:
@@ -55,6 +63,10 @@ namespace Day_19
                 sum += part.GetScore();
             }
             Console.WriteLine(sum);*/
+        }
+
+        static int[] FindRange(int[] lowerBound, int[] upperBound, string workflow) 
+        {
         }
     }
 }

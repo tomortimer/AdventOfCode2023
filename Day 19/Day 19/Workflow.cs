@@ -10,8 +10,8 @@ namespace Day_19
     internal class Workflow
     {
         List<Func<Part, bool>> comparisons;
-        List<string> outFuncs;
-        List<string> funcType;
+        public List<string> funcs; // want to store string for pt2
+        public List<string> outFuncs;
         public List<int> accepterFunctions;
         string defaultOut;
 
@@ -20,7 +20,7 @@ namespace Day_19
             comparisons = new List<Func<Part, bool>>();
             outFuncs = new List<string>();
             accepterFunctions = new List<int>();
-            funcType = new List<string>();
+            funcs = new List<string>();
 
             string[] parts = inp.Split(',');
             for(int i = 0; i < parts.Length - 1; i++)
@@ -44,7 +44,7 @@ namespace Day_19
                         case "a": tmp = x => x.a > compVal; break;
                         case "s": tmp = x => x.s > compVal; break;
                     }
-                    funcType.Add("greater");
+                    
                 }
                 else
                 {
@@ -57,7 +57,6 @@ namespace Day_19
                         case "a": tmp = x => x.a < compVal; break;
                         case "s": tmp = x => x.s < compVal; break;
                     }
-                    funcType.Add("less");
                 }
                 //parse output
                 string outFunc = part.Split(":")[1];
@@ -68,8 +67,10 @@ namespace Day_19
                 {
                     accepterFunctions.Add(outFuncs.Count - 1);
                 }
+                funcs.Add(comparison);
             }
             defaultOut = parts[parts.Length - 1];
+            if(defaultOut == "A") { accepterFunctions.Add(outFuncs.Count - 1); }
         }
 
         public string GetNextState(Part p)
@@ -80,22 +81,6 @@ namespace Day_19
                 if (comparisons[i](p)) { ret = outFuncs[i]; i = outFuncs.Count; }
             }
             return ret;
-        }
-
-        public AcceptedPart(int funcIndex) 
-        {
-            long upperX = 4000;
-            long lowerX = 0;
-            long upperM = 4000;
-            long lowerM = 0;
-            long upperA = 4000;
-            long lowerA = 0;
-            long upperS = 4000;
-            long lowerS = 0;
-            if (funcType[funcIndex] == "greater")
-            {
-                for(int )
-            }
         }
 
     }

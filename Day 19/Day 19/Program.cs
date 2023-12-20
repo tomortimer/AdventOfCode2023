@@ -8,13 +8,16 @@ namespace Day_19
         {
             MorteTools.List<string> lines = new MorteTools.FileParser().GetLinesFromTxt("input.txt");
             Dictionary<string, Workflow> sorter = new Dictionary<string, Workflow>();
+            Dictionary<string, Workflow> accepters = new Dictionary<string, Workflow>();
             
             int i = 0;
             while (lines[i] != "") 
             {
                 string ID = lines[i].Split('{')[0];
                 string workflow = lines[i].Split('{')[1].Trim('}');
-                sorter.Add(ID, new Workflow(workflow));
+                Workflow tmp = new Workflow(workflow);
+                sorter.Add(ID, tmp);
+                if (workflow.Contains("A")) { accepters.Add(ID, tmp); }
                 i++;
             }
 

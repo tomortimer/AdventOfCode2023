@@ -11,12 +11,14 @@ namespace Day_19
     {
         List<Func<Part, bool>> comparisons;
         List<string> outFuncs;
+        List<int> accepterFunctions;
         string defaultOut;
 
         public Workflow(string inp)
         {
             comparisons = new List<Func<Part, bool>>();
             outFuncs = new List<string>();
+            accepterFunctions = new List<int>();
 
             string[] parts = inp.Split(',');
             for(int i = 0; i < parts.Length - 1; i++)
@@ -58,6 +60,10 @@ namespace Day_19
 
                 comparisons.Add(tmp);
                 outFuncs.Add(outFunc);
+                if(outFunc == "A")
+                {
+                    accepterFunctions.Add(outFuncs.Count - 1);
+                }
             }
             defaultOut = parts[parts.Length - 1];
         }

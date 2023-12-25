@@ -2,6 +2,10 @@ I don't know how far I'll get this year, only did up till 13 last year. But it's
 
 Later Note: Probably won't get functional in this year, but I'm happy to be exploring a lot of the DSA that I didn't have access to last year. Will do different languages in the future hopefully :)
 
+Score on 25th: Might come back to some of these. Didn't do the last few days since really needed that break but glad to have improved on last year.
+
+![Final Art/Scoresheet](https://i.imgur.com/9eFkN7h.png)
+
 # General Structure
 - Each day has its own folder
 - A library of general DSs and some utility is built in MorteTools (all c# projects reference this)
